@@ -12,6 +12,13 @@ public class Motorista {
         this.cidade_base = cidade_base;
     }
 
+    public Motorista (String nome, String cnh, String veiculo, String cidade_base) {
+        this.nome = nome;
+        this.cnh = cnh;
+        this.veiculo = veiculo;
+        this.cidade_base = cidade_base;
+    }
+
     public int getMotorista_id() {
         return motorista_id;
     }
