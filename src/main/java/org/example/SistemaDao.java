@@ -10,7 +10,7 @@ import java.util.List;
 public class SistemaDao {
     public void cadastrar_cliente(Cliente cliente) throws SQLException{
         String command = """
-                
+                INSERT INTO Cliente
                 """;
     }
 }
