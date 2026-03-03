@@ -8,7 +8,7 @@ public class HistoricoEntrega {
     private LocalDate data_evento;
     private String descricao;
 
-    private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-dd-MM");
 
     public HistoricoEntrega(int id_historicoEntrega, int entrega_id, String data_evento, String descricao) {
         this.id_historicoEntrega = id_historicoEntrega;

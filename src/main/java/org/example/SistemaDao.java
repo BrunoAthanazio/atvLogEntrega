@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class SistemaDao {
     public void cadastrar_cliente(Cliente cliente) throws SQLException{
@@ -107,5 +109,37 @@ public class SistemaDao {
             stmt.setInt(2, id_entrega);
             stmt.executeUpdate();
         }
+    }
+
+    public List<Entrega> listar_entregas() throws SQLException{
+        List<Entrega> entregas = new ArrayList<>();
+        String query = """
+                SELECT Entrega.id_entrega, 
+                    Cliente.nome, 
+                    Motorista.nome, 
+                    Entrega.data_saida, 
+                    Entrega.data_entrega,
+                    Entrega.status
+                FROM Entrega
+                JOIN Pedido ON Entrega.pedido_id = Pedido.id_pedido
+                JOIN Cliente ON Pedido.cliente_id = Cliente.id_cliente
+                JOIN Motorista ON Entrega.motorista_id = Motorista.id_motorista;
+                """;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(query)){
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    int id_entrega = rs.getInt("Entrega.id_entrega");
+                    String cliente_nome = rs.getString("Cliente.nome");
+                    String motorista_nome = rs.getString("Motorista.nome");
+                    String data_saida = rs.getString("Entrega.data_saida");
+                    String data_entrega = rs.getString("Entrega.data_entrega");
+                    String status = rs.getString("Entrega.status");
+
+                    entregas.add(new Entrega(id_entrega, cliente_nome, motorista_nome, data_saida, data_entrega, status));
+                }
+
+        }
+        return entregas;
     }
 }

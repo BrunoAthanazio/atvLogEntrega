@@ -57,6 +57,10 @@ public class Main {
                 atualizar_statusEntrega();
                 break;
             }
+            case 7: {
+                listar_entregas();
+                break;
+            }
         }
     }
 
@@ -118,7 +122,7 @@ public class Main {
         int cliente_id = SC.nextInt();
         SC.nextLine();
 
-        System.out.println("Insira a data do pedido conforme o formato dd/mm/aaaa");
+        System.out.println("Insira a data do pedido conforme o formato aaaa-dd-mm");
         String data_pedido = SC.nextLine();
 
         System.out.println("Insira o volume do pedido");
@@ -168,10 +172,10 @@ public class Main {
         int motorista_id = SC.nextInt();
         SC.nextLine();
 
-        System.out.println("Insira a data de saída da entrega no formato dd/mm/aaaa");
+        System.out.println("Insira a data de saída da entrega no formato aaaa-dd-mm");
         String data_saida = SC.nextLine();
 
-        System.out.println("Insira a data de entrega da entrega no formato dd/mm/aaaa");
+        System.out.println("Insira a data de entrega da entrega no formato aaaa-dd-mm");
         String data_entrega = SC.nextLine();
 
         System.out.println("""
@@ -212,7 +216,7 @@ public class Main {
         int entrega_id = SC.nextInt();
         SC.nextLine();
 
-        System.out.println("Insira a data do evento no formato dd/mm/aaaa");
+        System.out.println("Insira a data do evento no formato aaaa-dd-mm");
         String data_evento = SC.nextLine();
 
         System.out.println("Faça uma descrição do evento:");
@@ -260,6 +264,26 @@ public class Main {
         } catch (SQLException e) {
             System.out.println("Erro ao acessar o banco de dados!");
             e.printStackTrace();
+        }
+    }
+
+    public static void listar_entregas() {
+        List<Entrega> entregas = new ArrayList<>();
+        var dao = new SistemaDao();
+        try{
+            entregas = dao.listar_entregas();
+        } catch (SQLException e) {
+            System.out.println("Erro ao acessar o banco de dados!");
+            e.printStackTrace();
+        }
+
+        for(Entrega entrega : entregas) {
+            System.out.println("ID: " + entrega.getId_entrega());
+            System.out.println("Cliente: " + entrega.getCliente_nome());
+            System.out.println("Motorista: " + entrega.getMotorista_nome());
+            System.out.println("Data de saída: " + entrega.getData_saida());
+            System.out.println("Data de entrega: " + entrega.getData_entrega());
+            System.out.println("Status da entrega: " + entrega.getStatus());
         }
     }
 }

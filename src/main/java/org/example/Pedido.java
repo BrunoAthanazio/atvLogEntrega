@@ -9,7 +9,7 @@ public class Pedido {
     private String volume_m3, peso_kg;
     private LocalDate data_pedido;
 
-    private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-dd-MM");
 
     public Pedido(int id_pedido, int cliente_id, String status, String volume_m3, String peso_kg, String data_pedido) {
         this.id_pedido = id_pedido;
