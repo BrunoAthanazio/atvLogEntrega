@@ -42,4 +42,70 @@ public class SistemaDao {
             stmt.executeUpdate();
         }
     }
+
+    public void criar_pedido(Pedido pedido) throws SQLException{
+        String command = """
+                INSERT INTO Pedido
+                (cliente_id, data_pedido, volume_m3, peso_kg, status)
+                VALUES
+                (?,?,?,?,?);
+                """;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(command)) {
+            stmt.setInt(1, pedido.getCliente_id());
+            stmt.setObject(2, pedido.getData_pedido());
+            stmt.setString(3, pedido.getVolume_m3());
+            stmt.setString(4, pedido.getPeso_kg());
+            stmt.setString(5, pedido.getStatus());
+            stmt.executeUpdate();
+        }
+    }
+
+    public void gerar_entrega(Entrega entrega) throws SQLException{
+        String command = """
+                INSERT INTO Entrega
+                (pedido_id, motorista_id, data_saida, data_entrega, status)
+                VALUES
+                (?,?,?,?,?);
+                """;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(command)) {
+            stmt.setInt(1, entrega.getPedido_id());
+            stmt.setInt(2, entrega.getMotorista_id());
+            stmt.setObject(3, entrega.getData_saida());
+            stmt.setObject(4, entrega.getData_entrega());
+            stmt.setString(5, entrega.getStatus());
+            stmt.executeUpdate();
+        }
+    }
+
+    public void gerar_HistoricoEntrega (HistoricoEntrega historicoEntrega) throws SQLException{
+        String command = """
+                INSERT INTO HistoricoEntrega
+                (entrega_id, data_evento, descricao)
+                VALUES
+                (?,?,?);
+                """;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(command)) {
+            stmt.setInt(1, historicoEntrega.getEntrega_id());
+            stmt.setObject(2, historicoEntrega.getData_evento());
+            stmt.setString(3, historicoEntrega.getDescricao());
+            stmt.executeUpdate();
+        }
+    }
+
+    public void atualizar_statusEntrega (String status, int id_entrega) throws SQLException{
+        String command = """
+                UPDATE Entrega
+                SET status = ?
+                WHERE id_entrega = ? 
+                """;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(command)) {
+            stmt.setString(1, status);
+            stmt.setInt(2, id_entrega);
+            stmt.executeUpdate();
+        }
+    }
 }
