@@ -127,19 +127,68 @@ public class SistemaDao {
                 """;
         try(Connection conn = Conexao.conectar();
             PreparedStatement stmt = conn.prepareStatement(query)){
-                ResultSet rs = stmt.executeQuery();
-                while (rs.next()) {
-                    int id_entrega = rs.getInt("Entrega.id_entrega");
-                    String cliente_nome = rs.getString("Cliente.nome");
-                    String motorista_nome = rs.getString("Motorista.nome");
-                    String data_saida = rs.getString("Entrega.data_saida");
-                    String data_entrega = rs.getString("Entrega.data_entrega");
-                    String status = rs.getString("Entrega.status");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int id_entrega = rs.getInt("Entrega.id_entrega");
+                String cliente_nome = rs.getString("Cliente.nome");
+                String motorista_nome = rs.getString("Motorista.nome");
+                String data_saida = rs.getString("Entrega.data_saida");
+                String data_entrega = rs.getString("Entrega.data_entrega");
+                String status = rs.getString("Entrega.status");
 
-                    entregas.add(new Entrega(id_entrega, cliente_nome, motorista_nome, data_saida, data_entrega, status));
-                }
+                entregas.add(new Entrega(id_entrega, cliente_nome, motorista_nome, data_saida, data_entrega, status));
+            }
 
         }
         return entregas;
+    }
+
+    public List<String> rel_entregas_motorista() throws SQLException{
+        List<String> relatorio = new ArrayList<>();
+        String linha = null;
+        String query = """
+                SELECT m.nome, COUNT(e.motorista_id) AS total_entregas
+                FROM Entrega e
+                RIGHT JOIN Motorista m ON e.motorista_id = m.id_motorista
+                GROUP BY m.nome;
+                """;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(query)){
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                String nome = rs.getString("m.nome");
+                String qtd_entregas = rs.getString("total_entregas");
+                linha = nome + " | " + qtd_entregas;
+
+                relatorio.add(linha);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return relatorio;
+    }
+
+    public List<String> rel_cliente_volume() throws SQLException{
+        List<String> relatorio = new ArrayList<>();
+        String query = """
+                SELECT c.nome, SUM(volume_m3) AS total_volume_entregue
+                FROM Pedido p
+                JOIN Cliente c ON p.cliente_id = c.id_cliente
+                WHERE p.status = "ENTREGUE"
+                GROUP BY p.cliente_id
+                ORDER BY total_volume_entregue DESC;
+                """;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(query)){
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                String nome = rs.getString("c.nome");
+                String total_volume = rs.getString("total_volume_entregue");
+                String linha = nome + " | " + total_volume;
+
+                relatorio.add(linha);
+            }
+        }
+        return relatorio;
     }
 }

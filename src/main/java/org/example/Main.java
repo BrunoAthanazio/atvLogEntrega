@@ -61,6 +61,15 @@ public class Main {
                 listar_entregas();
                 break;
             }
+            case 8: {
+                rel_entregas_motorista();
+                break;
+            }
+
+            case 9: {
+                rel_cliente_volume();
+                break;
+            }
         }
     }
 
@@ -284,6 +293,33 @@ public class Main {
             System.out.println("Data de saída: " + entrega.getData_saida());
             System.out.println("Data de entrega: " + entrega.getData_entrega());
             System.out.println("Status da entrega: " + entrega.getStatus());
+        }
+    }
+
+    public static void rel_entregas_motorista() {
+        List<String> relatorios = new ArrayList<>();
+        var dao = new SistemaDao();
+        try{
+            relatorios = dao.rel_entregas_motorista();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        for (String relatorio : relatorios){
+            System.out.println(relatorio);
+        }
+    }
+
+    public static void rel_cliente_volume() {
+        List<String> relatorios = new ArrayList<>();
+        var dao = new SistemaDao();
+        try{
+            relatorios = dao.rel_cliente_volume();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        for (String relatorio : relatorios) {
+            System.out.println(relatorio);
         }
     }
 }
