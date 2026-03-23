@@ -75,6 +75,11 @@ public class Main {
                 rel_pedidos_pendentes();
                 break;
             }
+
+            case 11: {
+                rel_entregas_atrasadas();
+                break;
+            }
         }
     }
 
@@ -338,6 +343,20 @@ public class Main {
         }
         System.out.println("estado | pedidos_pendentes");
         for (String relatorio : relatorios) {
+            System.out.println(relatorio);
+        }
+    }
+
+    public static void rel_entregas_atrasadas(){
+        List<String> relatorios = new ArrayList<>();
+        var dao = new SistemaDao();
+        try{
+            relatorios = dao.rel_entregas_atrasadas();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("cidade | entregas_atrasadas");
+        for (String relatorio : relatorios){
             System.out.println(relatorio);
         }
     }

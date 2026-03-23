@@ -195,10 +195,10 @@ public class SistemaDao {
     public List<String> rel_pedidos_pendentes() throws SQLException{
         List<String> relatorio = new ArrayList<>();
         String query = """
-                SELECT c.estado, COUNT(p.id_pedido) AS pedidos_pendentes
-                FROM Pedido p
-                JOIN Cliente c ON p.cliente_id = c.id_cliente
-                WHERE p.status = 'PENDENTE'
+                SELECT c.estado,
+                       COUNT(CASE WHEN p.status = 'PENDENTE' THEN 1 END) AS pedidos_pendentes
+                FROM Cliente c
+                RIGHT JOIN Pedido p ON c.id_cliente = p.cliente_id
                 GROUP BY c.estado;
                 """;
         try(Connection conn = Conexao.conectar();
@@ -208,6 +208,30 @@ public class SistemaDao {
                 String estado = rs.getString("c.estado");
                 String numPedidos = rs.getString("pedidos_pendentes");
                 String linha = estado + " | " + numPedidos;
+
+                relatorio.add(linha);
+            }
+        }
+        return relatorio;
+    }
+
+    public List<String> rel_entregas_atrasadas() throws SQLException{
+        List<String> relatorio = new ArrayList<>();
+        String query = """
+                SELECT c.cidade,
+                	COUNT(CASE WHEN e.status = 'ATRASADA' THEN 1 END) AS entregas_atrasadas
+                FROM Entrega e
+                JOIN Pedido p ON e.pedido_id = id_pedido
+                JOIN Cliente c ON p.cliente_id = c.id_cliente
+                GROUP BY c.cidade;
+                """;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(query)){
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                String cidade = rs.getString("c.cidade");
+                String numEntregas = rs.getString("entregas_atrasadas");
+                String linha = cidade + " | " + numEntregas;
 
                 relatorio.add(linha);
             }
