@@ -191,4 +191,27 @@ public class SistemaDao {
         }
         return relatorio;
     }
+
+    public List<String> rel_pedidos_pendentes() throws SQLException{
+        List<String> relatorio = new ArrayList<>();
+        String query = """
+                SELECT c.estado, COUNT(p.id_pedido) AS pedidos_pendentes
+                FROM Pedido p
+                JOIN Cliente c ON p.cliente_id = c.id_cliente
+                WHERE p.status = 'PENDENTE'
+                GROUP BY c.estado;
+                """;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(query)){
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                String estado = rs.getString("c.estado");
+                String numPedidos = rs.getString("pedidos_pendentes");
+                String linha = estado + " | " + numPedidos;
+
+                relatorio.add(linha);
+            }
+        }
+        return relatorio;
+    }
 }

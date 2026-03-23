@@ -70,6 +70,11 @@ public class Main {
                 rel_cliente_volume();
                 break;
             }
+
+            case 10: {
+                rel_pedidos_pendentes();
+                break;
+            }
         }
     }
 
@@ -318,6 +323,20 @@ public class Main {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        for (String relatorio : relatorios) {
+            System.out.println(relatorio);
+        }
+    }
+
+    public static void rel_pedidos_pendentes(){
+        List<String> relatorios = new ArrayList<>();
+        var dao = new SistemaDao();
+        try{
+            relatorios = dao.rel_pedidos_pendentes();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("estado | pedidos_pendentes");
         for (String relatorio : relatorios) {
             System.out.println(relatorio);
         }
