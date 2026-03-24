@@ -97,6 +97,10 @@ public class Main {
                 excluir_entrega();
                 break;
             }
+            case 15: {
+                excluir_cliente();
+                break;
+            }
         }
     }
 
@@ -455,6 +459,19 @@ public class Main {
             System.out.println("entrega excluida com sucesso");
         } else {
             System.out.println("id não encontrado");
+        }
+    }
+
+    public static void excluir_cliente(){
+        var dao = new SistemaDao();
+        System.out.println("Digite o id do cliente que deseja deletar");
+        int id_cliente = SC.nextInt();
+
+        try {
+            dao.excluir_cliente(id_cliente);
+        } catch (SQLException e) {
+            System.out.println("Erro ao acessar o banco de dados!");
+            e.printStackTrace();
         }
     }
 }

@@ -318,4 +318,15 @@ public class SistemaDao {
             stmt.executeUpdate();
         }
     }
+
+    public void excluir_cliente(int id_cliente) throws SQLException{
+        String command = """
+                DELETE FROM Cliente WHERE id_cliente = ?;
+                """;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(command)){
+            stmt.setInt(1, id_cliente);
+            stmt.executeUpdate();
+        }
+    }
 }
