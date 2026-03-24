@@ -8,7 +8,7 @@ public class Entrega {
     private LocalDate data_saida, data_entrega;
     private String status, cliente_nome, motorista_nome;
 
-    private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-dd-MM");
+    private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public Entrega(int id_entrega, int pedido_id, int motorista_id, String data_saida, String data_entrega, String status) {
         this.id_entrega = id_entrega;

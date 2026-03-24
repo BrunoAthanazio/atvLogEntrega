@@ -27,6 +27,11 @@ public class Main {
                 |    10 - Relatório: Pedidos Pendentes por Estado            |
                 |    11 - Relatório: Entregas Atrasadas por Cidade           |
                 |    12 - Buscar Pedido por CPF/CNPJ do Cliente              |
+                |    13 - Cancelar Pedido                                    |
+                |    14 - Excluir Entrega (com validação)                    |
+                |    15 - Excluir Cliente (com verificação de dependência)   |
+                |    16 - Excluir Motorista (com verificação de dependência) |
+                |    0 - Sair                                                |
                 |____________________________________________________________|
                 """);
         int opcao = SC.nextInt();
@@ -78,6 +83,10 @@ public class Main {
 
             case 11: {
                 rel_entregas_atrasadas();
+                break;
+            }
+            case 12: {
+                buscar_pedido_cpf_cnpj();
                 break;
             }
         }
@@ -358,6 +367,22 @@ public class Main {
         System.out.println("cidade | entregas_atrasadas");
         for (String relatorio : relatorios){
             System.out.println(relatorio);
+        }
+    }
+
+    public static void buscar_pedido_cpf_cnpj(){
+        var dao = new SistemaDao();
+        List<Pedido> pedidos = new ArrayList<>();
+        System.out.println("Digite o cpf/cnpj do cliente");
+        String cpf_cnpj = SC.nextLine();
+        try {
+            pedidos = dao.buscar_pedido_cpf_cnpj(cpf_cnpj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("nome_cliente | status_pedido | volume_m3 | peso_kg | data_pedido");
+        for (Pedido pedido : pedidos){
+            System.out.println(pedido.getCliente_nome() + " | " + pedido.getStatus() + " | " + pedido.getVolume_m3() + " | " + pedido.getPeso_kg() + " | " + pedido.getData_pedido());
         }
     }
 }

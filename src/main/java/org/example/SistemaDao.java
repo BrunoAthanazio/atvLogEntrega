@@ -238,4 +238,33 @@ public class SistemaDao {
         }
         return relatorio;
     }
+
+    public List<Pedido> buscar_pedido_cpf_cnpj(String cpf_cnpj) throws SQLException{
+        List<Pedido> pedidos = new ArrayList<>();
+        String query = """
+                SELECT c.nome,
+                	p.data_pedido,
+                	p.volume_m3,
+                	p.peso_kg,
+                	p.status
+                FROM Pedido p
+                JOIN Cliente c ON p.cliente_id = c.id_cliente
+                WHERE c.cpf_cnpj = ?;
+                """;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1, cpf_cnpj);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String nome = rs.getString("c.nome");
+                String data_pedido = rs.getString("p.data_pedido");
+                String volume_m3 = rs.getString("p.volume_m3");
+                String peso_kg = rs.getString("p.peso_kg");
+                String status = rs.getString("p.status");
+                pedidos.add(new Pedido(nome, status, volume_m3, peso_kg, data_pedido));
+            }
+
+        }
+        return pedidos;
+    }
 }

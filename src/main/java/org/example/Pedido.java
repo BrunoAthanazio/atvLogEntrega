@@ -8,6 +8,7 @@ public class Pedido {
     private String status;
     private String volume_m3, peso_kg;
     private LocalDate data_pedido;
+    private String cliente_nome;
 
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-dd-MM");
 
@@ -26,6 +27,18 @@ public class Pedido {
         this.volume_m3 = volume_m3;
         this.peso_kg = peso_kg;
         this.data_pedido = LocalDate.parse(data_pedido, FMT);
+    }
+
+    public Pedido(String cliente_nome, String status, String volume_m3, String peso_kg, String data_pedido) {
+        this.cliente_nome = cliente_nome;
+        this.status = status;
+        this.volume_m3 = volume_m3;
+        this.peso_kg = peso_kg;
+    this.data_pedido = LocalDate.parse(data_pedido, FMT);
+    }
+
+    public String getCliente_nome(){
+        return cliente_nome;
     }
 
     public int getId_pedido() {
