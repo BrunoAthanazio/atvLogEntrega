@@ -267,4 +267,44 @@ public class SistemaDao {
         }
         return pedidos;
     }
+
+    public void cancelar_pedido(int id_pedido) throws SQLException{
+        String command = """
+                UPDATE Pedido
+                SET status = 'CANCELADO'
+                WHERE id_pedido = ?;
+                """;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(command)){
+            stmt.setInt(1, id_pedido);
+            stmt.executeUpdate();
+        }
+    }
+
+    public List<Pedido> listar_pedidos() throws SQLException{
+        List<Pedido> pedidos = new ArrayList<>();
+        String query = """
+                SELECT id_pedido,
+                    cliente_id,
+                    status,
+                    volume_m3,
+                    peso_kg,
+                    data_pedido
+                FROM Pedido
+                """;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(query)){
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                int id_pedido = rs.getInt("id_pedido");
+                int cliente_id = rs.getInt("cliente_id");
+                String status = rs.getString("status");
+                String volume_m3 = rs.getString("volume_m3");
+                String peso_kg = rs.getString("peso_kg");
+                String data_pedido = rs.getString("data_pedido");
+                pedidos.add(new Pedido(id_pedido, cliente_id, status, volume_m3, peso_kg, data_pedido));
+            }
+        }
+        return pedidos;
+    }
 }

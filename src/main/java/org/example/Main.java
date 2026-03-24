@@ -89,6 +89,10 @@ public class Main {
                 buscar_pedido_cpf_cnpj();
                 break;
             }
+            case 13: {
+                cancelar_pedido();
+                break;
+            }
         }
     }
 
@@ -377,12 +381,35 @@ public class Main {
         String cpf_cnpj = SC.nextLine();
         try {
             pedidos = dao.buscar_pedido_cpf_cnpj(cpf_cnpj);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         System.out.println("nome_cliente | status_pedido | volume_m3 | peso_kg | data_pedido");
         for (Pedido pedido : pedidos){
             System.out.println(pedido.getCliente_nome() + " | " + pedido.getStatus() + " | " + pedido.getVolume_m3() + " | " + pedido.getPeso_kg() + " | " + pedido.getData_pedido());
+        }
+    }
+
+    public static void cancelar_pedido(){
+        var dao = new SistemaDao();
+        List<Pedido> pedidos = new ArrayList<>();
+        System.out.println("Pedidos existentes: ");
+        try{
+            pedidos = dao.listar_pedidos();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        System.out.println("Id_pedido | cliente_id | data_pedido | volume_m3 | peso_kg | status");
+        for (Pedido pedido : pedidos) {
+
+            System.out.println(pedido.getId_pedido() + " | " + pedido.getCliente_id() + " | " + pedido.getData_pedido() + " | " + pedido.getVolume_m3() + " | " + pedido.getPeso_kg() + " | " + pedido.getStatus());
+        }
+        System.out.println("Digite o id do pedido que deseja cancelar: ");
+        int id_pedido = SC.nextInt();
+        try{
+            dao.cancelar_pedido(id_pedido);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
