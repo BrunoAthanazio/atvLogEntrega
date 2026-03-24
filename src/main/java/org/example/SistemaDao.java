@@ -329,4 +329,15 @@ public class SistemaDao {
             stmt.executeUpdate();
         }
     }
+
+    public void excluir_motorista(int id_motorista) throws SQLException{
+        String command = """
+                DELETE FROM Motorista WHERE id_motorista = ?;
+                """;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(command)){
+            stmt.setInt(1, id_motorista);
+            stmt.executeUpdate();
+        }
+    }
 }

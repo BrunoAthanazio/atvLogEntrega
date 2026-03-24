@@ -36,7 +36,6 @@ public class Main {
                 """);
         int opcao = SC.nextInt();
         SC.nextLine();
-
         switch (opcao){
             case 1:{
                 cadastrar_cliente();
@@ -101,6 +100,13 @@ public class Main {
                 excluir_cliente();
                 break;
             }
+            case 16: {
+                excluir_motorista();
+                break;
+            }
+            case 0: {
+                System.exit(0);
+            }
         }
     }
 
@@ -129,6 +135,7 @@ public class Main {
             System.out.println("Erro ao acessar o banco de dados!");
             e.printStackTrace();
         }
+        inicio();
     }
 
     public static void cadastrar_motorista() {
@@ -153,9 +160,10 @@ public class Main {
             System.out.println("Erro ao acessar o banco de dados!");
             e.printStackTrace();
         }
+        inicio();
     }
 
-    public static void criar_pedido(){
+    public static void criar_pedido() {
         var dao = new SistemaDao();
 
         System.out.println("Insira o id do cliente");
@@ -172,11 +180,11 @@ public class Main {
         String peso_kg = SC.nextLine();
 
         System.out.println("""
-               Insira o status do pedido:
-               1. PENDENTE
-               2. ENTREGUE
-               3. CANCELADO
-               """);
+                Insira o status do pedido:
+                1. PENDENTE
+                2. ENTREGUE
+                3. CANCELADO
+                """);
         int opcao = SC.nextInt();
         String status = "PENDENTE";
         switch (opcao) {
@@ -184,22 +192,23 @@ public class Main {
                 status = "PENDENTE";
                 break;
             }
-            case 2:{
+            case 2: {
                 status = "ENTREGUE";
                 break;
             }
-            case 3:{
+            case 3: {
                 status = "CANCELADO";
                 break;
             }
         }
         Pedido pedido = new Pedido(cliente_id, status, volume_m3, peso_kg, data_pedido);
-        try{
+        try {
             dao.criar_pedido(pedido);
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             System.out.println("Erro ao acessar o banco de dados!");
             e.printStackTrace();
         }
+        inicio();
     }
 
     public static void gerar_entrega(){
@@ -247,6 +256,7 @@ public class Main {
             System.out.println("Erro ao acessar o baco de dados!");
             e.printStackTrace();
         }
+        inicio();
     }
 
     public static void gerar_historicoEntrega(){
@@ -269,6 +279,7 @@ public class Main {
             System.out.println("Erro ao acessar o banco de dados!");
             e.printStackTrace();
         }
+        inicio();
     }
 
     public static void atualizar_statusEntrega() {
@@ -305,6 +316,7 @@ public class Main {
             System.out.println("Erro ao acessar o banco de dados!");
             e.printStackTrace();
         }
+        inicio();
     }
 
     public static void listar_entregas() {
@@ -325,6 +337,7 @@ public class Main {
             System.out.println("Data de entrega: " + entrega.getData_entrega());
             System.out.println("Status da entrega: " + entrega.getStatus());
         }
+        inicio();
     }
 
     public static void rel_entregas_motorista() {
@@ -340,6 +353,7 @@ public class Main {
         for (String relatorio : relatorios){
             System.out.println(relatorio);
         }
+        inicio();
     }
 
     public static void rel_cliente_volume() {
@@ -354,6 +368,7 @@ public class Main {
         for (String relatorio : relatorios) {
             System.out.println(relatorio);
         }
+        inicio();
     }
 
     public static void rel_pedidos_pendentes(){
@@ -369,6 +384,7 @@ public class Main {
         for (String relatorio : relatorios) {
             System.out.println(relatorio);
         }
+        inicio();
     }
 
     public static void rel_entregas_atrasadas(){
@@ -384,6 +400,7 @@ public class Main {
         for (String relatorio : relatorios){
             System.out.println(relatorio);
         }
+        inicio();
     }
 
     public static void buscar_pedido_cpf_cnpj(){
@@ -401,6 +418,7 @@ public class Main {
         for (Pedido pedido : pedidos){
             System.out.println(pedido.getCliente_nome() + " | " + pedido.getStatus() + " | " + pedido.getVolume_m3() + " | " + pedido.getPeso_kg() + " | " + pedido.getData_pedido());
         }
+        inicio();
     }
 
     public static void cancelar_pedido(){
@@ -426,6 +444,7 @@ public class Main {
             System.out.println("Erro ao acessar o banco de dados");
             e.printStackTrace();
         }
+        inicio();
     }
 
     public static void excluir_entrega(){
@@ -460,6 +479,7 @@ public class Main {
         } else {
             System.out.println("id não encontrado");
         }
+        inicio();
     }
 
     public static void excluir_cliente(){
@@ -473,5 +493,20 @@ public class Main {
             System.out.println("Erro ao acessar o banco de dados!");
             e.printStackTrace();
         }
+        inicio();
+    }
+
+    public static void excluir_motorista(){
+        var dao = new SistemaDao();
+        System.out.println("Digite o id do motorista que deseja excluir");
+        int id_motorista = SC.nextInt();
+
+        try{
+            dao.excluir_motorista(id_motorista);
+        } catch (SQLException e) {
+            System.out.println("Erro ao acessar o banco de dados!");
+            e.printStackTrace();
+        }
+        inicio();
     }
 }
