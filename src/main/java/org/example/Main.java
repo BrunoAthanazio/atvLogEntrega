@@ -93,6 +93,10 @@ public class Main {
                 cancelar_pedido();
                 break;
             }
+            case 14: {
+                excluir_entrega();
+                break;
+            }
         }
     }
 
@@ -325,6 +329,7 @@ public class Main {
         try{
             relatorios = dao.rel_entregas_motorista();
         }catch (SQLException e){
+            System.out.println("Erro ao acessar o banco de dados");
             e.printStackTrace();
         }
 
@@ -339,6 +344,7 @@ public class Main {
         try{
             relatorios = dao.rel_cliente_volume();
         } catch (SQLException e) {
+            System.out.println("Erro ao acessar o banco de dados");
             e.printStackTrace();
         }
         for (String relatorio : relatorios) {
@@ -352,6 +358,7 @@ public class Main {
         try{
             relatorios = dao.rel_pedidos_pendentes();
         } catch (SQLException e) {
+            System.out.println("Erro ao acessar o banco de dados");
             e.printStackTrace();
         }
         System.out.println("estado | pedidos_pendentes");
@@ -366,6 +373,7 @@ public class Main {
         try{
             relatorios = dao.rel_entregas_atrasadas();
         } catch (SQLException e) {
+            System.out.println("Erro ao acessar o banco de dados");
             e.printStackTrace();
         }
         System.out.println("cidade | entregas_atrasadas");
@@ -382,6 +390,7 @@ public class Main {
         try {
             pedidos = dao.buscar_pedido_cpf_cnpj(cpf_cnpj);
         } catch (SQLException e) {
+            System.out.println("Erro ao acessar o banco de dados");
             e.printStackTrace();
         }
         System.out.println("nome_cliente | status_pedido | volume_m3 | peso_kg | data_pedido");
@@ -397,6 +406,7 @@ public class Main {
         try{
             pedidos = dao.listar_pedidos();
         }catch (SQLException e){
+            System.out.println("Erro ao acessar o banco de dados");
             e.printStackTrace();
         }
         System.out.println("Id_pedido | cliente_id | data_pedido | volume_m3 | peso_kg | status");
@@ -409,7 +419,42 @@ public class Main {
         try{
             dao.cancelar_pedido(id_pedido);
         } catch (SQLException e) {
+            System.out.println("Erro ao acessar o banco de dados");
             e.printStackTrace();
+        }
+    }
+
+    public static void excluir_entrega(){
+        var dao = new SistemaDao();
+        List<Entrega> entregas = new ArrayList<>();
+        System.out.println("Entregas existentes: ");
+        try{
+            entregas = dao.listar_entregas();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        System.out.println("id_entrega | cliente_nome | motorista_nome | data_saída | data_entrega | status");
+        for (Entrega entrega : entregas){
+            System.out.println(entrega.getId_entrega() + " | " + entrega.getCliente_nome() + " | " + entrega.getMotorista_nome() + " | " + entrega.getData_saida() + " | " + entrega.getData_entrega() + " | " + entrega.getStatus());
+        }
+        System.out.println("Digite o id da entrega que deseja excluir: ");
+        int id_entrega = SC.nextInt();
+        boolean validação = false;
+        for (Entrega entrega : entregas){
+            if (entrega.getId_entrega() == id_entrega){
+                try{
+                    dao.excluir_entrega(id_entrega);
+                } catch (SQLException e) {
+                    System.out.println("Erro ao acessar o banco de dados");
+                    e.printStackTrace();
+                }
+                validação = true;
+            }
+        }
+        if (validação){
+            System.out.println("entrega excluida com sucesso");
+        } else {
+            System.out.println("id não encontrado");
         }
     }
 }

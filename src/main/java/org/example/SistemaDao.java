@@ -307,4 +307,15 @@ public class SistemaDao {
         }
         return pedidos;
     }
+
+    public void excluir_entrega(int id_entrega) throws SQLException{
+        String command = """
+                DELETE FROM Entrega WHERE id_entrega = ?; 
+                """;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(command)){
+            stmt.setInt(1, id_entrega);
+            stmt.executeUpdate();
+        }
+    }
 }
